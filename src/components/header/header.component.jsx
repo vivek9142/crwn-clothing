@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom';
 import './header.styles.scss';
 import {auth} from '../../firebase/firebase.utils';
 import { connect } from 'react-redux';
+import CartIcon from '../cart-icon/cart-icon.component';
+import CartDropdown from '../cart-dropdown/cart-dropdown.component';
+
 //connect is a higher order component that lets us modify 
 //our component to have access to things related to Redox.
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 
-const Header = ({currentUser}) => (
+const Header = ({currentUser,hidden}) => (
     <div className="header">
         <Link className="logo-container" to="/">
             <Logo className="logo"/>
@@ -21,11 +24,16 @@ const Header = ({currentUser}) => (
             </Link>
             {
                 currentUser ?
+                // for signing out 
                 <div className='option' onClick={()=> auth.signOut()}>SIGN OUT</div>
                 :
                 <Link className='option' to='/signin'>SIGN IN</Link>
             }
+            <CartIcon/>
         </div>
+        { hidden ? null :
+            <CartDropdown/>
+        }
     </div>
 )
 // we'll do with connect is we are actually going to pass it to functions,
@@ -52,8 +60,8 @@ const Header = ({currentUser}) => (
 //And we want to pass in a current user property where the value 
 //of it will be St. John's user,  current user.
 
-const mapStateToProps = state =>({
-    currentUser:state.user.currentUser
+const mapStateToProps = ({user: {currentUser}, cart: {hidden}}) =>({
+    currentUser,hidden
 });
 
 export default connect(mapStateToProps)(Header);

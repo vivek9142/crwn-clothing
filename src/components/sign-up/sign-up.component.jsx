@@ -28,6 +28,10 @@ class Signup extends React.Component{
         }
 
         try{
+            /*Creates a new user account associated with the specified email address and password.
+            On successful creation of the user account, this user will also be signed in to your 
+            application. */
+            
             const {user} = await auth.createUserWithEmailAndPassword(email,password);
             await createUserProfileDocument(user,{displayName});
             this.setState({

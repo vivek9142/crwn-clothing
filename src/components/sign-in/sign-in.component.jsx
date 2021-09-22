@@ -19,6 +19,7 @@ class SignIn extends React.Component{
         const {email,password} = this.state;
 
         try{
+            //method for signin in firebase auth module 
             await auth.signInWithEmailAndPassword(email,password);
             this.setState({email:'',password:''});
         }catch(err){

@@ -16,6 +16,8 @@ class App extends React.Component {
   componentDidMount(){
     const { setCurrentUser } = this.props;
 
+    //onAuthStateChanged method on auth object of firebase ,here param is user which is logged in
+    // onAuthStateChanged returns a method for unsubscription to firebase obj for any subsequent memory leaks
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       // createUserProfileDocument(userAuth);
       // this.setState({currentUser:user});
@@ -24,10 +26,17 @@ class App extends React.Component {
 
       if(userAuth){
         const userRef = await createUserProfileDocument(userAuth);
+
+        //the moment createUserProfileDocument instantiate, it will send us the snapshot obj
+        //representing the data stored in db and that method is onSnapshot
+        
         userRef.onSnapshot(snapShot => {
           setCurrentUser({
             setCurrentUser:({
               id:snapShot.id,
+              // this will send out the proper user data. 
+              //unlike the logging snapshot will give meta info about the data but not 
+              //actual data
               ...snapShot.data()
             })
           });
@@ -41,6 +50,7 @@ class App extends React.Component {
   }
 
   componentWillUnmount(){
+    //closing the firebase subscription
     this.unsubscribeFromAuth();
   }
   render(){
@@ -57,7 +67,7 @@ class App extends React.Component {
     );
   }
 }
-//just like we did earlier with our heter component, we're going 
+//just like we did earlier with our other component, we're going 
 //to connect our app to the outcome of our initial connect call using.
 //The second argument of Kinect, which is map dispatched the props.
 
