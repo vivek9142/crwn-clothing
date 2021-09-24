@@ -4,10 +4,14 @@ import  HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import Header from './components/header/header.component';
 import SignInSignUpPage from './pages/signin-signup-page/signin-signup-page.component';
+import CheckoutPage from './pages/checkout/checkout.component';
+
 import { auth,createUserProfileDocument } from './firebase/firebase.utils';
 import React from 'react';
 import { connect } from 'react-redux';
 import {setCurrentUser} from './redux/user/user.actions';
+import {selectCurrentUser} from './redux/user/user.selector';
+import {createStructuredSelector} from 'reselect';
 
 class App extends React.Component {
   
@@ -62,6 +66,7 @@ class App extends React.Component {
         <Route path='/shop' component={ShopPage}/>
         <Route exact path='/signin' 
         render={() => this.props.currentUser ? (<Redirect to='/'/>) : (<SignInSignUpPage/>)}/>
+        <Route exact path='/checkout' component={CheckoutPage}/>
         </Switch>
       </div>
     );
@@ -71,9 +76,9 @@ class App extends React.Component {
 //to connect our app to the outcome of our initial connect call using.
 //The second argument of Kinect, which is map dispatched the props.
 
-const mapStateToProps = ({user}) => ({
-  currentUser:user.currentUser
-});
+const mapStateToProps = createStructuredSelector({
+  currentUser:selectCurrentUser
+})
 
 //takes dispatch and return an obj where propname will be whatever 
 //prop we want to pass in that dispatches the new action that 

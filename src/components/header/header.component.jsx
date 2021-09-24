@@ -5,6 +5,9 @@ import {auth} from '../../firebase/firebase.utils';
 import { connect } from 'react-redux';
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
+import { createStructuredSelector } from 'reselect';
+import { selectCartHidden } from '../../redux/cart/cart.selectors';
+import {selectCurrentUser} from '../../redux/user/user.selector';
 
 //connect is a higher order component that lets us modify 
 //our component to have access to things related to Redox.
@@ -60,8 +63,13 @@ const Header = ({currentUser,hidden}) => (
 //And we want to pass in a current user property where the value 
 //of it will be St. John's user,  current user.
 
-const mapStateToProps = ({user: {currentUser}, cart: {hidden}}) =>({
-    currentUser,hidden
+
+
+// createStructuredSelector will enclose the obj containing
+// the selectors n send state to them by iteslf.
+const mapStateToProps = createStructuredSelector({
+    currentUser:selectCurrentUser,
+    hidden:selectCartHidden
 });
 
 export default connect(mapStateToProps)(Header);
