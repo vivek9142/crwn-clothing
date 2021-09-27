@@ -43,6 +43,7 @@
     ]
   },
   "devDependencies": {
+    "redux-persist": "^6.0.0",
     "reselect": "^4.0.0"
   }
 }

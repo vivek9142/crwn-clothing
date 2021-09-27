@@ -1,4 +1,5 @@
 import {createStore , applyMiddleware} from 'redux';
+import {persistStore} from 'redux-persist';
 
 import logger from 'redux-logger';
 //logger middleware catches the action ,logs it out and moves it along 
@@ -16,6 +17,9 @@ const middlewares = [logger];
 // we did it this way coz in the future we miht want to modify 
 //this array above base on certain conditions
 
-const store = createStore(rootReducer,applyMiddleware(...middlewares));
+export const store = createStore(rootReducer,applyMiddleware(...middlewares));
 
-export default store;
+//creating a new persisting version of our store
+export const persistor = persistStore(store);
+
+export default {store,persistor};
