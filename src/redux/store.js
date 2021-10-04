@@ -10,7 +10,7 @@ import rootReducer from './root-reducer';
 //we make it an array and inside is our logger middleware
 const middlewares = [];
 
-if(ProcessingInstruction.env.NODE_ENV === 'development'){
+if(process.env.NODE_ENV === 'development'){
     middlewares.push(logger);
 }
 
