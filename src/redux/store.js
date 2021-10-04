@@ -8,7 +8,11 @@ import rootReducer from './root-reducer';
 //set up the middleware so the store is 
 //expecting from redux is going to be an array
 //we make it an array and inside is our logger middleware
-const middlewares = [logger];
+const middlewares = [];
+
+if(ProcessingInstruction.env.NODE_ENV === 'development'){
+    middlewares.push(logger);
+}
 
 //createStore create the store n it expects both
 // root reducer and return value of applymiddleware
