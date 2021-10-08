@@ -53,6 +53,53 @@ const config = {
     return userRef;
   }
 
+  export const addCollectionAndDocuments = async(collectionKey,ObjectsToAdd) => {
+    const collectionRef = firestore.collection(collectionKey);
+    
+    //here we r gonna create a ref doc obj n set it using set()
+    //in firestore we can only make a set call at a time
+    //we cant set the collectionref.set and give an array of values through it
+    //since each call is individual they fire it 1 at a time,if for any reason 
+    //the calls get failed we r not sure which calls are successfull n which ones are failed
+    
+    //so batch groups all our calls n make a big request/
+    //in batch we can add all set calls n then make a req call
+  
+    const batch = firestore.batch();
+    ObjectsToAdd.forEach(obj => {
+      const newDocRef = collectionRef.doc(); //we want to get doc at a empty string.
+      //this will give a new doc ref n randomly generate new id for it.
+      //if no param for id is passed here firestore will generate random id
+      
+      batch.set(newDocRef,obj); 
+      //will set the batch adding one 1 value at a time in batch
+      //1 param - doc ref 2param-the value we want to set it to
+    });
+
+    //this will fire off the batch req.it returns back from calling 
+    //commit is promise, if succeeds,it will come back n resolve a void val mean null val
+    return await batch.commit()
+  }
+
+
+  export const convertCollectionsSnapshotToMap = (collections) => {
+    const transformedCollection = collections.docs.map(doc=> {
+      const {title,items} = doc.data();
+
+    return {
+      routeName:encodeURI(title.toLowerCase()),
+      id:doc.id,
+      title,
+      items
+    }
+    });
+
+    return transformedCollection.reduce((accumulator,collection)=> {
+      accumulator[collection.title.toLowerCase()] = collection;
+      return accumulator;
+    },{});
+  }
+
 //2- initialize firebase with config credentials
   firebase.initializeApp(config);
 //for auth use 

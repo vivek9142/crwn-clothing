@@ -6,19 +6,25 @@ import Header from './components/header/header.component';
 import SignInSignUpPage from './pages/signin-signup-page/signin-signup-page.component';
 import CheckoutPage from './pages/checkout/checkout.component';
 
-import { auth,createUserProfileDocument } from './firebase/firebase.utils';
+import { auth,createUserProfileDocument,
+  // addCollectionAndDocuments 
+} from './firebase/firebase.utils';
+
 import React from 'react';
 import { connect } from 'react-redux';
 import {setCurrentUser} from './redux/user/user.actions';
 import {selectCurrentUser} from './redux/user/user.selector';
 import {createStructuredSelector} from 'reselect';
+// import {selectCollectionsForPreview} from './redux/shop/shop.selectors';
 
 class App extends React.Component {
   
   unsubscribeFromAuth = null;
 
   componentDidMount(){
-    const { setCurrentUser } = this.props;
+    const { setCurrentUser}
+      // ,collectionsArray } 
+      = this.props;
 
     //onAuthStateChanged method on auth object of firebase ,here param is user which is logged in
     // onAuthStateChanged returns a method for unsubscription to firebase obj for any subsequent memory leaks
@@ -49,6 +55,8 @@ class App extends React.Component {
 
       } else {
         setCurrentUser(userAuth);
+        //func for adding collection n values to it n after its done no use for it
+        // addCollectionAndDocuments('collections',collectionsArray.map(({title,items})=>({title,items})));
       }
     });
   }
@@ -77,7 +85,8 @@ class App extends React.Component {
 //The second argument of Kinect, which is map dispatched the props.
 
 const mapStateToProps = createStructuredSelector({
-  currentUser:selectCurrentUser
+  currentUser:selectCurrentUser,
+  // collectionsArray:selectCollectionsForPreview
 })
 
 //takes dispatch and return an obj where propname will be whatever 
