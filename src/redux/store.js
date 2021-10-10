@@ -1,6 +1,7 @@
 import {createStore , applyMiddleware} from 'redux';
 import {persistStore} from 'redux-persist';
 
+import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 //logger middleware catches the action ,logs it out and moves it along 
 
@@ -8,7 +9,7 @@ import rootReducer from './root-reducer';
 //set up the middleware so the store is 
 //expecting from redux is going to be an array
 //we make it an array and inside is our logger middleware
-const middlewares = [];
+const middlewares = [thunk];
 
 if(process.env.NODE_ENV === 'development'){
     middlewares.push(logger);
