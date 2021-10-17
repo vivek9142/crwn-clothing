@@ -100,6 +100,15 @@ const config = {
     },{});
   }
 
+  export const  getCurrentUser = () => {
+    return new Promise((resolve,reject) => {
+      const unsubscribe = auth.onAuthStateChanged(userAuth => {
+        unsubscribe();
+        resolve(userAuth);
+      },reject)
+    });
+  }
+
 //2- initialize firebase with config credentials
   firebase.initializeApp(config);
 //for auth use 
@@ -108,11 +117,13 @@ const config = {
   export const firestore = firebase.firestore();
 
   //google auth provider
-  const provider = new firebase.auth.GoogleAuthProvider();
+  export const googleProvider = new firebase.auth.GoogleAuthProvider();
   //this will ask for google sign in with prompt window
-  provider.setCustomParameters({prompt:'select_account'});
+  googleProvider.setCustomParameters({prompt:'select_account'});
 
   //attaching auth to provider
-  export const signInWithGoogle = () => auth.signInWithPopup(provider);
+  export const signInWithGoogle = () => auth.signInWithPopup(googleProvider);
   
   export default firebase;
+
+  

@@ -6,59 +6,20 @@ import Header from './components/header/header.component';
 import SignInSignUpPage from './pages/signin-signup-page/signin-signup-page.component';
 import CheckoutPage from './pages/checkout/checkout.component';
 
-import { auth,createUserProfileDocument,
-  // addCollectionAndDocuments 
-} from './firebase/firebase.utils';
-
 import React from 'react';
 import { connect } from 'react-redux';
-import {setCurrentUser} from './redux/user/user.actions';
 import {selectCurrentUser} from './redux/user/user.selector';
 import {createStructuredSelector} from 'reselect';
-// import {selectCollectionsForPreview} from './redux/shop/shop.selectors';
+import {checkUserSession} from './redux/user/user.actions';
+
 
 class App extends React.Component {
   
   unsubscribeFromAuth = null;
 
   componentDidMount(){
-    const { setCurrentUser}
-      // ,collectionsArray } 
-      = this.props;
-
-    //onAuthStateChanged method on auth object of firebase ,here param is user which is logged in
-    // onAuthStateChanged returns a method for unsubscription to firebase obj for any subsequent memory leaks
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      // createUserProfileDocument(userAuth);
-      // this.setState({currentUser:user});
-
-      // console.log(user);
-
-      if(userAuth){
-        const userRef = await createUserProfileDocument(userAuth);
-
-        //the moment createUserProfileDocument instantiate, it will send us the snapshot obj
-        //representing the data stored in db and that method is onSnapshot
-        
-        userRef.onSnapshot(snapShot => {
-          setCurrentUser({
-            setCurrentUser:({
-              id:snapShot.id,
-              // this will send out the proper user data. 
-              //unlike the logging snapshot will give meta info about the data but not 
-              //actual data
-              ...snapShot.data()
-            })
-          });
-
-        });
-
-      } else {
-        setCurrentUser(userAuth);
-        //func for adding collection n values to it n after its done no use for it
-        // addCollectionAndDocuments('collections',collectionsArray.map(({title,items})=>({title,items})));
-      }
-    });
+    const {checkUserSession} = this.props;
+    checkUserSession();
   }
 
   componentWillUnmount(){
@@ -85,23 +46,12 @@ class App extends React.Component {
 //The second argument of Kinect, which is map dispatched the props.
 
 const mapStateToProps = createStructuredSelector({
-  currentUser:selectCurrentUser,
-  // collectionsArray:selectCollectionsForPreview
+  currentUser:selectCurrentUser
 })
 
-//takes dispatch and return an obj where propname will be whatever 
-//prop we want to pass in that dispatches the new action that 
-//we're trying to pass, which is current user.
-const mapDispatchToProps = dispatch=>({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
-})
-
-//Now, the first argument is map states are props, but our app 
-// doesn't actually need current user anymore because outside of
-// passing it into a header, it only sets it, but it doesn't do
-// anything with the current user value in its component itself.
-// So what we can do is pass in null as the first argument, because
-// we don't need any state.So props from our producer.
+const mapDispatchToProps = dispatch => ({
+  checkUserSession: () => dispatch(checkUserSession())
+});
 
 export default connect(mapStateToProps,mapDispatchToProps)(App);
 
