@@ -1,6 +1,5 @@
 import React from 'react';
 
-import {auth} from '../../firebase/firebase.utils';
 import { connect } from 'react-redux';
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
@@ -10,7 +9,7 @@ import {selectCurrentUser} from '../../redux/user/user.selector';
 import { signOutStart } from '../../redux/user/user.actions';
 // import './header.styles.scss';
 
-import { HeaderContainer,LogoContainer,OptionsContainer,OptionDiv,OptionLink } from './header.styles';
+import { HeaderContainer,LogoContainer,OptionsContainer,OptionLink } from './header.styles';
 
 //connect is a higher order component that lets us modify 
 //our component to have access to things related to Redox.

@@ -6,27 +6,19 @@ import Header from './components/header/header.component';
 import SignInSignUpPage from './pages/signin-signup-page/signin-signup-page.component';
 import CheckoutPage from './pages/checkout/checkout.component';
 
-import React from 'react';
+import React,{useEffect} from 'react';
 import { connect } from 'react-redux';
 import {selectCurrentUser} from './redux/user/user.selector';
 import {createStructuredSelector} from 'reselect';
 import {checkUserSession} from './redux/user/user.actions';
 
 
-class App extends React.Component {
-  
-  unsubscribeFromAuth = null;
+const App = ({checkUserSession,currentUser}) => {
 
-  componentDidMount(){
-    const {checkUserSession} = this.props;
+  useEffect(()=>{
     checkUserSession();
-  }
+  },[checkUserSession]);
 
-  componentWillUnmount(){
-    //closing the firebase subscription
-    this.unsubscribeFromAuth();
-  }
-  render(){
     return (
       <div>
         <Header />
@@ -34,12 +26,11 @@ class App extends React.Component {
         <Route exact path='/' component={HomePage}/>
         <Route path='/shop' component={ShopPage}/>
         <Route exact path='/signin' 
-        render={() => this.props.currentUser ? (<Redirect to='/'/>) : (<SignInSignUpPage/>)}/>
+        render={() => currentUser ? (<Redirect to='/'/>) : (<SignInSignUpPage/>)}/>
         <Route exact path='/checkout' component={CheckoutPage}/>
         </Switch>
       </div>
     );
-  }
 }
 //just like we did earlier with our other component, we're going 
 //to connect our app to the outcome of our initial connect call using.
