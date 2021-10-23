@@ -1,5 +1,6 @@
 import './App.css';
 import {Route,Switch,Redirect} from 'react-router-dom';
+import { useSelector,useDispatch } from 'react-redux';
 import  HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import Header from './components/header/header.component';
@@ -7,17 +8,20 @@ import SignInSignUpPage from './pages/signin-signup-page/signin-signup-page.comp
 import CheckoutPage from './pages/checkout/checkout.component';
 
 import React,{useEffect} from 'react';
-import { connect } from 'react-redux';
 import {selectCurrentUser} from './redux/user/user.selector';
-import {createStructuredSelector} from 'reselect';
 import {checkUserSession} from './redux/user/user.actions';
 
 
-const App = ({checkUserSession,currentUser}) => {
+const App = () => {
+  const currentUser = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
 
   useEffect(()=>{
-    checkUserSession();
-  },[checkUserSession]);
+    dispatch(checkUserSession());
+  },[dispatch]);
+    //this dispatch dependency will not update since the compiler will take the previously 
+    //defined dispatch func on re-render since it was defined before.it will run 
+    //only 1 time once it mounts
 
     return (
       <div>
@@ -32,17 +36,7 @@ const App = ({checkUserSession,currentUser}) => {
       </div>
     );
 }
-//just like we did earlier with our other component, we're going 
-//to connect our app to the outcome of our initial connect call using.
-//The second argument of Kinect, which is map dispatched the props.
 
-const mapStateToProps = createStructuredSelector({
-  currentUser:selectCurrentUser
-})
 
-const mapDispatchToProps = dispatch => ({
-  checkUserSession: () => dispatch(checkUserSession())
-});
-
-export default connect(mapStateToProps,mapDispatchToProps)(App);
+export default App;
 
