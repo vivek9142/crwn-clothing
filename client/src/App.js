@@ -1,4 +1,4 @@
-import './App.css';
+
 import {Route,Switch,Redirect} from 'react-router-dom';
 import { useSelector,useDispatch } from 'react-redux';
 import  HomePage from './pages/homepage/homepage.component';
@@ -11,6 +11,7 @@ import React,{useEffect} from 'react';
 import {selectCurrentUser} from './redux/user/user.selector';
 import {checkUserSession} from './redux/user/user.actions';
 
+import GlobalStyle from './global.styles';
 
 const App = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -25,6 +26,7 @@ const App = () => {
 
     return (
       <div>
+        <GlobalStyle/>
         <Header />
         <Switch>
         <Route exact path='/' component={HomePage}/>
