@@ -13,6 +13,7 @@ const port = process.env.PORT || 5000;
 
 app.use(compression());
 
+
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
